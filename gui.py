@@ -8,8 +8,6 @@ class MainPage(ctk.CTk):
         self.geometry("400x300")
         self.title("Maxeth")
 
-app = MainPage()
-app.mainloop()
 
 def login():
     username = "test"
@@ -19,8 +17,17 @@ def login():
     new_window.title("new window")
     new_window.geometry("350x150")
     
-    if user_entry.get() == username and user_pass.get() == password:
-        tkmb.showinfo("title="Login Sucessful", 
-        message="You have logged in")
-        ctk.CTkLavel(new_window,
-                     text="bruh").pack()
+label = ctk.CTkLabel(self, text = "Login")
+label.pack(pady=20)
+
+frame = ctk.CTkFrame(master=app)
+frame.pack(pady=20, padx=40, fill='both',expand=True)
+
+label = ctk.CTkLabel(master=frame,text="main login")
+label.pack(pady=12,padx=10)
+
+user_entry = ctk.CTkEntry(master=frame, text = "Login Here")
+user_entry.pack(pady=20)
+
+
+app.mainloop()
