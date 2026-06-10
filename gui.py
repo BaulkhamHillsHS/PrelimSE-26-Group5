@@ -12,7 +12,7 @@ app.title("MAXeth Streaming Services")
 def login():
     username = "test"
     password = "test2"
-    
+            
     new_window = ctk.CTkTopLevel(app)
     new_window.title("new window")
     new_window.geometry("350x150")
@@ -23,11 +23,11 @@ label.pack(pady=20)
 frame = ctk.CTkFrame(master=app)
 frame.pack(pady=20, padx=40, fill='both',expand=True)
 
-label = ctk.CTkLabel(master=frame,text="main login")
+label = ctk.CTkLabel(master=frame,text="Login to MAXeth Streaming Services!")
 label.pack(pady=12,padx=10)
 
-user_entry = ctk.CTkEntry(master=frame, text = "Login Here")
-user_entry.pack(pady=20)
+user_entry = ctk.CTkEntry(master=frame, placeholder_text = "Username")
+user_entry.pack(pady=12,padx=10)
 
 loginbutton = ctk.CTkButton(master=frame,text='Login' ,command=login)
 loginbutton.pack(pady=12,padx=10)
