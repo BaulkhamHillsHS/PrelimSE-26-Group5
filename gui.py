@@ -29,5 +29,7 @@ label.pack(pady=12,padx=10)
 user_entry = ctk.CTkEntry(master=frame, text = "Login Here")
 user_entry.pack(pady=20)
 
+button = ctk.CTkButton(master=frame,text='Login' ,command=login)
+button.pack(pady=12,padx=10)
 
 app.mainloop()
