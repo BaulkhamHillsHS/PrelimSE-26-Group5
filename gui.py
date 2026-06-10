@@ -2,6 +2,9 @@ import customtkinter as ctk
 import os 
 import csv
 
+ctk.set_appearnce_mode("dark")
+ctk.set_default_color_theme("blue")
+
 app = ctk.CTk()
 app.geometry("400x400")
 app.title("MAXeth Streaming Services")
@@ -29,5 +32,7 @@ user_entry.pack(pady=20)
 button = ctk.CTkButton(master=frame,text='Login' ,command=login)
 button.pack(pady=12,padx=10)
 
+checkbox = ctk.CTKCheckBox(master=frame,text='Remember Me')
+checkbox.pack(pady=12,padx=10)
 
 app.mainloop()
