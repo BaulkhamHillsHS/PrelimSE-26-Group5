@@ -2,12 +2,9 @@ import customtkinter as ctk
 import os 
 import csv
 
-class MainPage(ctk.CTk):
-    def __init__(self):
-        super().__init__()
-        self.geometry("400x300")
-        self.title("Maxeth")
-
+app = ctk.CTk()
+app.geometry("400x400")
+app.title("MAXeth Streaming Services")
 
 def login():
     username = "test"
@@ -28,6 +25,7 @@ label.pack(pady=12,padx=10)
 
 user_entry = ctk.CTkEntry(master=frame, text = "Login Here")
 user_entry.pack(pady=20)
+
 
 
 app.mainloop()
