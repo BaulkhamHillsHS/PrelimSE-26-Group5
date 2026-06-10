@@ -9,11 +9,11 @@ app.title("MAXeth Streaming Services")
 def login():
     username = "test"
     password = "test2"
-    
+            
     new_window = ctk.CTkTopLevel(app)
     new_window.title("new window")
     new_window.geometry("350x150")
-    
+                            
 label = ctk.CTkLabel(self, text = "Login")
 label.pack(pady=20)
 
