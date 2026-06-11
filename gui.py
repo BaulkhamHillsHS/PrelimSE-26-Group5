@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import os 
 import csv
+import tkinter.messagebox as tkmb
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -13,9 +14,19 @@ def login():
     username = "test"
     password = "test2"
             
-    new_window = ctk.CTkTopLevel(app)
+    new_window = ctk.CTkToplevel(app)
     new_window.title("new window")
-    new_window.geometry("350x150")
+    new_window.geometry("600x700")
+
+    if user_entry.get() == username and user_pass.get() == password:
+        tkmb.showinfo(title="Login Successful",message="You have logged in successfully")
+        ctk.CTkLabel(new_window,text="MAXeth Streaming Service").pack()
+    elif user_entry.get() == username and user_pass.get() != password:
+        tkmb.showwarning(title='Wrong password',message='Please check your password')
+    elif user_entry.get() != username and user_pass.get() == password:
+        tkmb.showwarning(title='Wrong username',message='Please check your username')
+    else:
+        tkmb.showerror(title="Login failed",message="Invalid Username and password")
     
 label = ctk.CTkLabel(app, text = "Login")
 label.pack(pady=20)
@@ -29,7 +40,7 @@ label.pack(pady=12,padx=10)
 user_entry = ctk.CTkEntry(master=frame, placeholder_text = "Username")
 user_entry.pack(pady=12,padx=10)
 
-user_pass = ctk.CTkEntry(master=frame, placeholder_text = "Password")
+user_pass = ctk.CTkEntry(master=frame, placeholder_text = "Password",show=(*))
 user_pass.pack(pady=12,padx=10)
 
 loginbutton = ctk.CTkButton(master=frame,text='Login' ,command=login)
