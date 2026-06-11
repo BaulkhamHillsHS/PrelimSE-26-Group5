@@ -29,6 +29,9 @@ label.pack(pady=12,padx=10)
 user_entry = ctk.CTkEntry(master=frame, placeholder_text = "Username")
 user_entry.pack(pady=12,padx=10)
 
+user_pass = ctk.CTkEntry(master=frame, placeholder_text = "Password")
+user_pass.pack(pady=12,padx=10)
+
 loginbutton = ctk.CTkButton(master=frame,text='Login' ,command=login)
 loginbutton.pack(pady=12,padx=10)
 
@@ -36,15 +39,14 @@ checkbox = ctk.CTkCheckBox(master=frame,text='Remember Me')
 checkbox.pack(pady=12,padx=10)
 
 def searchbar():
-
-textbox = ctk.CTkTextbox(
-    master=app,
-    width=400,
-    height=200,
-    corner_radius=10,
-    border_width=2
-)
-textbox.pack(pady=20, padx=20, fill="both", expand=True)
+    textbox = ctk.CTkTextbox(
+        master=app,
+        width=400,
+        height=200,
+        corner_radius=10,
+        border_width=2
+    )
+    textbox.pack(pady=20, padx=20, fill="both", expand=True)
 
 
 app.mainloop()
