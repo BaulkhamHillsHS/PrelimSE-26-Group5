@@ -10,10 +10,10 @@ app = ctk.CTk()
 app.geometry("400x400")
 app.title("MAXeth Streaming Service")
 
-def create_profile():
-    new_window2 = ctk.CTkToplevel(app)
+def create_profile(): 
+    new_window2 = ctk.CTkToplevel(app) #creates new window for profile creation
     new_window2.title("MAXeth Profile Creation")
-    new_window2.geometry("100x200")
+    new_window2.geometry("600x600")
 
     ctk.CTkLabel(new_window2, text="Create your profile", font=("Arial", 24, "bold")).pack(pady=20)
 
@@ -23,13 +23,16 @@ def create_profile():
     password = ctk.CTkEntry(new_window2, placeholder_text="Create a password")
     password.pack(pady=12,padx=10)
 
-def  profile():
-    new_window1 = ctk.CTkFrame(profile_window)
-    new_window1.pack(pady=20,padx=40, fill='both',expand='True')
+    create_button = ctk.CTkButton(new_window2, text="Create", command=open_window_login)
+    create_button.pack(pady=10)
 
-    profile_window = ctk.CTkToplevel(app)
-    profile_window.title("MAXeth Profile Selection")
-    profile_window.geometry("1920x1080")
+def  profile():
+    new_window1 = ctk.CTkToplevel(app)
+    new_window1.title("MAXeth Profile Selection")
+    new_window1.geometry("1920x1080")    
+    
+    profile_window = ctk.CTkFrame(new_window1)
+    profile_window.pack(pady=20,padx=40, fill='both',expand='True')
 
     ctk.CTkLabel(profile_window, text="Choose your profile", font=("Arial", 24, "bold")).pack(pady=20)
     create = ctk.CTkButton(profile_window, text="Create a profile",command=create_profile)
@@ -67,8 +70,7 @@ def login(): #Function for the login page
     if user_entry.get() == username and user_pass.get() == password:
         tkmb.showinfo(title="Login Successful",message="You have logged in successfully")
         app.withdraw() # Hides the login window
-        profile()
-        open_window_login() # Calls the new window function
+        profile() #Calls profile function
     elif user_entry.get() == username and user_pass.get() != password:
         tkmb.showwarning(title='Wrong password',message='Please check your password')
     elif user_entry.get() != username and user_pass.get() == password:
