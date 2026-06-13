@@ -10,10 +10,36 @@ app = ctk.CTk()
 app.geometry("400x400")
 app.title("MAXeth Streaming Service")
 
+def create_profile():
+    new_window2 = ctk.CTkToplevel(app)
+    new_window2.title("MAXeth Profile Creation")
+    new_window2.geometry("100x200")
+
+    ctk.CTkLabel(new_window2, text="Create your profile", font=("Arial", 24, "bold")).pack(pady=20)
+
+    username = ctk.CTkEntry(new_window2, placeholder_text="Create a username")
+    username.pack(pady=12,padx=10)
+
+    password = ctk.CTkEntry(new_window2, placeholder_text="Create a password")
+    password.pack(pady=12,padx=10)
+
+def  profile():
+    new_window1 = ctk.CTkFrame(profile_window)
+    new_window1.pack(pady=20,padx=40, fill='both',expand='True')
+
+    profile_window = ctk.CTkToplevel(app)
+    profile_window.title("MAXeth Profile Selection")
+    profile_window.geometry("1920x1080")
+
+    ctk.CTkLabel(profile_window, text="Choose your profile", font=("Arial", 24, "bold")).pack(pady=20)
+    create = ctk.CTkButton(profile_window, text="Create a profile",command=create_profile)
+    create.pack(pady=20,padx=20)
+
+
 def open_window_login(): # Function which opens a new window after successful login
     new_window = ctk.CTkToplevel(app)
-    new_window.title("new window")
-    new_window.geometry("600x700")
+    new_window.title("MAXeth Streaming Service")
+    new_window.geometry("1920x1080")
     
     ctk.CTkLabel(new_window, text="MAXeth Streaming Service", font=("Arial", 24, "bold")).pack(pady=20) # Bolded Heading for name of streaming service
     search_bar = ctk.CTkEntry(new_window, placeholder_text="Search Movies...") # Search bar
@@ -26,21 +52,22 @@ def open_window_login(): # Function which opens a new window after successful lo
     genre_options = ctk.CTkOptionMenu(filterborder, values=["All", "Action", "Comedy"])
     genre_options.pack(side="left", padx=5)
     
-    ctk.CTkLabel(filterborder, text="Genre:").pack(side="left", padx=5)
+    ctk.CTkLabel(filterborder, text="Type:").pack(side="left", padx=5)
     type_options = ctk.CTkOptionMenu(filterborder, values=["All", "Movie", "Series"])
     type_options.pack(side="left", padx=5)
     
-    ctk.CTkLabel(filterborder, text="Genre:").pack(side="left", padx=5)
+    ctk.CTkLabel(filterborder, text="Rating:").pack(side="left", padx=5)
     rating_options = ctk.CTkOptionMenu(filterborder, values=["All", "G", "PG", "PG-13", "MA-15", "R"])
     rating_options.pack(side="left", padx=5)
     
-def login():
+def login(): #Function for the login page
     username = "test"
     password = "test2"
 
     if user_entry.get() == username and user_pass.get() == password:
         tkmb.showinfo(title="Login Successful",message="You have logged in successfully")
         app.withdraw() # Hides the login window
+        profile()
         open_window_login() # Calls the new window function
     elif user_entry.get() == username and user_pass.get() != password:
         tkmb.showwarning(title='Wrong password',message='Please check your password')
@@ -49,6 +76,9 @@ def login():
     else:
         tkmb.showerror(title="Login failed",message="Invalid Username and password")
     
+
+
+
 label = ctk.CTkLabel(app, text = "Login")
 label.pack(pady=20)
 
