@@ -26,7 +26,7 @@ def create_profile():
     create_button = ctk.CTkButton(new_window2, text="Create", command=open_window_login)
     create_button.pack(pady=10)
 
-def  profile():
+def profile():
     new_window1 = ctk.CTkToplevel(app)
     new_window1.title("MAXeth Profile Selection")
     new_window1.geometry("1920x1080")    
@@ -37,7 +37,37 @@ def  profile():
     ctk.CTkLabel(profile_window, text="Choose your profile", font=("Arial", 24, "bold")).pack(pady=20)
     create = ctk.CTkButton(profile_window, text="Create a profile",command=create_profile)
     create.pack(pady=20,padx=20)
-
+    
+def open_watchlist():
+    watchlist_window = ctk.CTkToplevel(app)
+    watchlist_window.title("My Watchlist")
+    watchlist_window.geometry("400x500")
+    ctk.CTkLabel(watchlist_window, text="My Watchlist", font=("Arial", 20, "bold")).pack(pady=20)
+    
+    watchlist_box = ctk.CTkTextbox(watchlist_window, width = 350, height = 250)
+    watchlist_box.pack(pady=10, padx=10)
+    watchlist_box.insert("end", "Your watchlist is currently empty.")
+    
+    add_entry = ctk.CTkEntry(watchlist_window, placeholder_text="Add a movie to your watchlist")
+    add_entry.pack(pady=5)
+    
+    ctk.CTkButton(watchlist_window, text="Add").pack(pady=5)
+    ctk.CTkButton(watchlist_window, text="Remove").pack(pady=5)
+    
+def open_subscription():
+    sub_window = ctk.CTkToplevel(app)
+    sub_window.title("Subscription Management")
+    sub_window.geometry("400x500")
+    
+    ctk.CTkLabel(sub_window, text="My Subscription", font=("Arial", 20, "bold")).pack(pady=20)
+    
+    ctk.CTkLabel(sub_window, text="Current Plan:", font=("Arial",14)).pack(pady=5)
+    ctk.CTkLabel(sub_window, text="Basic:", font=("Arial",12)).pack(pady=5)
+    
+    ctk.CTkLabel(sub_window, text="Change Plan:", font=("Arial",14)).pack(pady=10)
+    plan_options = ctk.CTkOptionMenu(sub_window, values=["Basic", "Standard", "Premium"])
+    plan_options.pack(pady=5)
+  
 
 def open_window_login(): # Function which opens a new window after successful login
     new_window = ctk.CTkToplevel(app)
@@ -62,6 +92,9 @@ def open_window_login(): # Function which opens a new window after successful lo
     ctk.CTkLabel(filterborder, text="Rating:").pack(side="left", padx=5)
     rating_options = ctk.CTkOptionMenu(filterborder, values=["All", "G", "PG", "PG-13", "MA-15", "R"])
     rating_options.pack(side="left", padx=5)
+    
+    ctk.CTkButton(new_window, text="My Watchlist", command=open_watchlist).pack(pady=10)
+    ctk.CTkButton(new_window, text="Subscription Management", command=open_subscription).pack(pady=10)
     
 def login(): #Function for the login page
     username = "test"
