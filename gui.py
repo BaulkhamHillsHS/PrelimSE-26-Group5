@@ -87,6 +87,15 @@ def viewing_report():
         tkmb.showinfo("saved", "report saved as viewing_report.txt")
     
     ctk.CTkButton(report_window, text="Save Report", command=save_report).pack(pady=10)
+    
+def play_content(movie_name):
+    play_window = ctk.CTkTopLevel(app)
+    play_window.title(movie_name)
+    play_window.geometry("500x400")
+    
+    ctk.CTkLabel(play_window, text=movie_name, font=("Arial", 20, "bold")).pack(pady=20)
+    ctk.CTkLabel(play_window, text="🎬", font=("Arial", 80)).pack(pady=20)
+    ctk.CTkLabel(play_window, text="Now Playing...").pack(pady=5)
 
 
 def open_window_login(): # Function which opens a new window after successful login
