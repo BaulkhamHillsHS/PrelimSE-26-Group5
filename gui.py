@@ -11,6 +11,22 @@ app = ctk.CTk()
 app.geometry("400x400")
 app.title("MAXeth Streaming Service")
 
+viewing_history = "history.csv"
+
+if not os.path.exists(viewing_history):
+    with open(viewing_history, "w", newline="") as f:
+        csv.writer(f).writerow(["movie"])
+
+def add_to_viewing_history(movie):
+    with open(viewing_history, "a", newline="") as f:
+        csv.writer(f).writerow([movie])
+
+def get_viewing_history():
+    with open(viewing_history, "r") as f:
+        reader = csv.reader(f)
+        next(reader)
+        return[row[0] for row in reader]
+
 def create_profile(): 
     new_window2 = ctk.CTkToplevel(app) #creates new window for profile creation
     new_window2.title("MAXeth Profile Creation")
@@ -19,12 +35,13 @@ def create_profile():
     ctk.CTkLabel(new_window2, text="Create your profile", font=("Arial", 24, "bold")).pack(pady=20)
 
     username = ctk.CTkEntry(new_window2, placeholder_text="Create a username")
-    username.pack(pady=12,padx=10)
+    username.pack(pady=15) #Profile does not need a password due to already logging in to an account
 
-    password = ctk.CTkEntry(new_window2, placeholder_text="Create a password")
-    password.pack(pady=12,padx=10)
+    def create():
+        new_window2.destroy()
+        open_window_login()
 
-    create_button = ctk.CTkButton(new_window2, text="Create", command=open_window_login)
+    create_button = ctk.CTkButton(new_window2, text="Create", command=create)
     create_button.pack(pady=10)
 
 def profile():
@@ -35,9 +52,19 @@ def profile():
     profile_window = ctk.CTkFrame(new_window1)
     profile_window.pack(pady=20,padx=40, fill='both',expand='True')
 
+    def create1():
+        new_window1.destroy()
+        create_profile()
+
+    def profile1():
+        new_window1.destroy()
+        open_window_login()
+
     ctk.CTkLabel(profile_window, text="Choose your profile", font=("Arial", 24, "bold")).pack(pady=20)
-    create = ctk.CTkButton(profile_window, text="Create a profile",command=create_profile)
-    create.pack(pady=20,padx=20)
+    create_button = ctk.CTkButton(profile_window, text="Create a profile", width=200, height=90, command=create1)
+    create_button.pack(pady=20,padx=20)
+    user_profile = ctk.CTkButton(profile_window, text = "Profile 1", width = 200, height=90, command=profile1)
+    user_profile.pack(pady=20,padx=20)
     
 def open_watchlist():
     watchlist_window = ctk.CTkToplevel(app)
@@ -97,7 +124,6 @@ def play_content(movie_name):
     ctk.CTkLabel(play_window, text=movie_name, font=("Arial", 20, "bold")).pack(pady=20)
     ctk.CTkLabel(play_window, text="🎬", font=("Arial", 80)).pack(pady=20)
     ctk.CTkLabel(play_window, text="Now Playing...").pack(pady=5)
-
 
 def open_window_login(): # Function which opens a new window after successful login
     new_window = ctk.CTkToplevel(app)
