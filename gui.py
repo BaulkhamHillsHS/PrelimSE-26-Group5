@@ -2,6 +2,7 @@ import customtkinter as ctk
 import os 
 import csv
 import tkinter.messagebox as tkmb
+import PIL
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -95,6 +96,8 @@ def open_window_login(): # Function which opens a new window after successful lo
     
     ctk.CTkButton(new_window, text="My Watchlist", command=open_watchlist).pack(pady=10)
     ctk.CTkButton(new_window, text="Subscription Management", command=open_subscription).pack(pady=10)
+
+    ctk.CTkButton(new_window, text="Movie 1")
     
 def login(): #Function for the login page
     username = "test"
@@ -111,8 +114,6 @@ def login(): #Function for the login page
     else:
         tkmb.showerror(title="Login failed",message="Invalid Username and password")
     
-
-
 
 label = ctk.CTkLabel(app, text = "Login")
 label.pack(pady=20)
