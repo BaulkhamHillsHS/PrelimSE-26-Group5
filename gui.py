@@ -68,7 +68,36 @@ def open_subscription():
     ctk.CTkLabel(sub_window, text="Change Plan:", font=("Arial",14)).pack(pady=10)
     plan_options = ctk.CTkOptionMenu(sub_window, values=["Basic", "Standard", "Premium"])
     plan_options.pack(pady=5)
-  
+    
+def viewing_report():
+    report_window = ctk.CTkToplevel(app)
+    report_window.title("Viewing Report")
+    report_window.geometry("400x500")
+    report_window.after(10, report_window.lift)
+    
+    ctk.CTkLabel(report_window, text="Viewing Report", font=("Arial", 20, "bold")).pack(pady=20)
+    
+    report_box = ctk.CTkTextbox(report_window, width=350, height=300)
+    report_box.pack(pady=10, padx=10)
+    
+    def save_report():
+        with open("viewing_report.txt", "w") as f:
+            f.write("MAXeth Streaming Service - Viewing report\n")
+            f.write("Watch History\n")
+            f.write("No History\n")
+        tkmb.showinfo("saved", "report saved as viewing_report.txt")
+    
+    ctk.CTkButton(report_window, text="Save Report", command=save_report).pack(pady=10)
+    
+def play_content(movie_name):
+    play_window = ctk.CTkTopLevel(app)
+    play_window.title(movie_name)
+    play_window.geometry("500x400")
+    
+    ctk.CTkLabel(play_window, text=movie_name, font=("Arial", 20, "bold")).pack(pady=20)
+    ctk.CTkLabel(play_window, text="🎬", font=("Arial", 80)).pack(pady=20)
+    ctk.CTkLabel(play_window, text="Now Playing...").pack(pady=5)
+
 
 def open_window_login(): # Function which opens a new window after successful login
     new_window = ctk.CTkToplevel(app)
@@ -98,6 +127,7 @@ def open_window_login(): # Function which opens a new window after successful lo
     ctk.CTkButton(new_window, text="Subscription Management", command=open_subscription).pack(pady=10)
 
     ctk.CTkButton(new_window, text="Movie 1")
+    ctk.CTkButton(new_window, text="Viewing Report", command=viewing_report).pack(pady=10)
     
 def login(): #Function for the login page
     username = "test"
