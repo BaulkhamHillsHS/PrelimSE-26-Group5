@@ -13,6 +13,10 @@ app.geometry("400x400")
 app.title("MAXeth Streaming Service")
 
 viewing_history = "history.csv"
+watchlist = []
+movies = [
+    {"Title": "The Matrix", "genre": "Sci-Fi", "type": "Movie", "rating": "MA-15"},
+]
 
 if not os.path.exists(viewing_history):
     with open(viewing_history, "w", newline="") as f:
@@ -108,8 +112,28 @@ def open_watchlist():
     add_entry = ctk.CTkEntry(watchlist_window, placeholder_text="Add a movie to your watchlist")
     add_entry.pack(pady=5)
     
-    ctk.CTkButton(watchlist_window, text="Add").pack(pady=5)
-    ctk.CTkButton(watchlist_window, text="Remove").pack(pady=5)
+    def add_movie():
+        movie = add_entry.get().strip()
+        if movie and movie not in watchlist:
+            watchlist.append(movie)
+            add_entry.delete(0, "end")
+            watchlist_box.delete("1.0", "end")
+            for item in watchlist:
+                watchlist_box.insert("end", f"{item}\n")
+                
+    def remove_movie():
+        movie = add_entry.get().strip()
+        if movie in watchlist:
+            watchlist.remove(movie)
+            add_entry.delete(0, "end")
+            if watchlist:
+                for item in watchlist:
+                    watchlist_box.insert("end", f"{item}\n")
+            else:
+                watchlist_box.insert("end", "Your Watchlist is currently empty.")
+    
+    ctk.CTkButton(watchlist_window, text="Add", command=add_movie).pack(pady=5)
+    ctk.CTkButton(watchlist_window, text="Remove", command=remove_movie).pack(pady=5)
     
 def open_subscription():
     sub_window = ctk.CTkToplevel(app)
@@ -119,12 +143,21 @@ def open_subscription():
     ctk.CTkLabel(sub_window, text="My Subscription", font=("Arial", 20, "bold")).pack(pady=20)
     
     ctk.CTkLabel(sub_window, text="Current Plan:", font=("Arial",14)).pack(pady=5)
-    ctk.CTkLabel(sub_window, text="Basic:", font=("Arial",12)).pack(pady=5)
+    current_plan_label = ctk.CTkLabel(sub_window, text=test_account.subscription_plan, font=("Arial",12))
+    current_plan_label.pack(pady=5)
     
     ctk.CTkLabel(sub_window, text="Change Plan:", font=("Arial",14)).pack(pady=10)
     plan_options = ctk.CTkOptionMenu(sub_window, values=["Basic", "Standard", "Premium"])
     plan_options.pack(pady=5)
     
+    def change_plan():
+        new_plan = plan_options.get()
+        test_account.subscription_plan = new_plan
+        current_plan_label.configure(text=new_plan)
+        tkmb.showinfo("Plan Updated", f"Your plan has been changed to {new_plan}")
+    
+    ctk.CTkButton(sub_window, text="Confirm Change", command=change_plan).pack(pady=10)
+
 def viewing_report():
     report_window = ctk.CTkToplevel(app)
     report_window.title("Viewing Report")
@@ -187,10 +220,34 @@ def open_window_login(): # Function which opens a new window after successful lo
     
     ctk.CTkButton(new_window, text="My Watchlist", command=open_watchlist).pack(pady=10)
     ctk.CTkButton(new_window, text="Subscription Management", command=open_subscription).pack(pady=10)
-
-    ctk.CTkButton(new_window, text="Movie 1", command=lambda: play_content("Movie 1")).pack(pady=5)
     ctk.CTkButton(new_window, text="Viewing Report", command=viewing_report).pack(pady=10)
     
+    movie_buttons_frame = ctk.CTkFrame(new_window)
+    movie_buttons_frame.pack(pady=10, padx=10, fill='x')
+    
+    def display_movies(filtered_list):
+        for widget in movie_buttons_frame.winfo_children():
+            widget.destroy()
+        for movie in filtered_list:
+            ctk.CTkButton(movie_buttons_frame, text=movie["Title"], command=lambda m=movie: play_content(m["Title"])).pack(pady=2)
+    
+    def filter_movies():
+        genre = genre_options.get()
+        content_type = type_options.get()
+        rating = rating_options.get()
+        
+        filtered = movies
+        if genre != "All":
+            filtered = [m for m in filtered if m["genre"] == genre]
+        if content_type != "All":
+            filtered = [m for m in filtered if m["type"] == content_type]
+        if rating != "All":
+            filtered = [m for m in filtered if m["rating"] == rating]
+        display_movies(filtered)
+        
+    ctk.CTkButton(filterborder, text="Filter", command=filter_movies).pack(side="left", padx=5)
+    display_movies(movies)
+
 def login(): #Function for the login page
     if user_entry.get() == test_account.email and test_account.check_password(user_pass.get()):
         tkmb.showinfo(title="Login Successful",message="You have logged in successfully")
