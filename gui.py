@@ -3,6 +3,7 @@ import os
 import csv
 import tkinter.messagebox as tkmb
 import PIL
+from PIL import Image
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -204,6 +205,9 @@ def login(): #Function for the login page
     
 
 label = ctk.CTkLabel(app, text = "Login")
+logo_image = ctk.CTkImage(light_image=Image.open("maxethlogo.png"), dark_image=Image.open("maxethlogo.png"), size=(100,100))
+logo_label = ctk.CTkLabel(app, image=logo_image, text="")
+logo_label.pack(pady=10)
 label.pack(pady=20)
 
 frame = ctk.CTkFrame(master=app)
