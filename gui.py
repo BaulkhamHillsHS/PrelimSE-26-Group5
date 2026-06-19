@@ -16,6 +16,15 @@ viewing_history = "history.csv"
 watchlist = []
 movies = [
     {"Title": "The Matrix", "genre": "Sci-Fi", "type": "Movie", "rating": "MA-15"},
+    {"Title": "Inception", "genre": "Sci-Fi", "type": "Movie", "rating": "M"},
+    {"Title": "The Dark Knight", "genre": "Action", "type": "Movie", "rating": "M"},
+    {"Title": "Interstellar", "genre": "Sci-Fi", "type": "Movie", "rating": "M"},
+    {"Title": "Titanic", "genre": "Romance", "type": "Movie", "rating": "M"},
+    {"Title": "Jurassic Park", "genre": "Adventure", "type": "Movie", "rating": "PG"},
+    {"Title": "Avengers: Endgame", "genre": "Action", "type": "Movie", "rating": "M"},
+    {"Title": "Toy Story", "genre": "Animation", "type": "Movie", "rating": "G"},
+    {"Title": "The Shawshank Redemption", "genre": "Drama", "type": "Movie", "rating": "MA-15"},
+    {"Title": "Spider-Man: Into the Spider-Verse", "genre": "Animation", "type": "Movie", "rating": "PG"}
 ]
 
 if not os.path.exists(viewing_history):
