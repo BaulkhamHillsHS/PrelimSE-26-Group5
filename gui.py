@@ -26,6 +26,34 @@ def get_viewing_history():
         reader = csv.reader(f)
         next(reader)
         return[row[0] for row in reader]
+    
+class AccountCredentials:
+    def __init__(self, name, email, password, subscription_plan, profiles=None):
+        self.name = name
+        self.email = email
+        self.password = password
+        self.subscription_plan = subscription_plan
+        self.profiles = profiles if profiles else []
+    
+    def check_password(self, attempt):
+        return self.password == attempt
+    
+    def save_to_csv(self, filename="accounts.csv"):
+        file_exists = os.path.exists(filename)
+        with open(filename, "a", newline="") as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                writer.writerow(["name", "email", "password", "subscription_plan", "profiles"])
+            writer.writerow([self.name, self.email, self.password, self.subscription_plan, ";".join(self.profiles)])
+    
+test_account = AccountCredentials(
+    name="Humza",
+    email="alpha@maxeth.com",
+    password="potato321",
+    subscription_plan="Basic",
+    profiles=["Profile 1"]
+)
+test_account.save_to_csv()
 
 def create_profile(): 
     new_window2 = ctk.CTkToplevel(app) #creates new window for profile creation
@@ -108,22 +136,29 @@ def viewing_report():
     report_box.pack(pady=10, padx=10)
     
     def save_report():
+        history = get_viewing_history()
         with open("viewing_report.txt", "w") as f:
             f.write("MAXeth Streaming Service - Viewing report\n")
             f.write("Watch History\n")
-            f.write("No History\n")
+            if history:
+                for movie in history:
+                    f.write(f"- {movie}\n")
+            else:
+                f.write("No History\n")
         tkmb.showinfo("saved", "report saved as viewing_report.txt")
     
     ctk.CTkButton(report_window, text="Save Report", command=save_report).pack(pady=10)
     
 def play_content(movie_name):
-    play_window = ctk.CTkTopLevel(app)
+    play_window = ctk.CTkToplevel(app)
     play_window.title(movie_name)
     play_window.geometry("500x400")
     
     ctk.CTkLabel(play_window, text=movie_name, font=("Arial", 20, "bold")).pack(pady=20)
     ctk.CTkLabel(play_window, text="🎬", font=("Arial", 80)).pack(pady=20)
     ctk.CTkLabel(play_window, text="Now Playing...").pack(pady=5)
+    
+    add_to_viewing_history(movie_name)
 
 def open_window_login(): # Function which opens a new window after successful login
     new_window = ctk.CTkToplevel(app)
@@ -152,20 +187,17 @@ def open_window_login(): # Function which opens a new window after successful lo
     ctk.CTkButton(new_window, text="My Watchlist", command=open_watchlist).pack(pady=10)
     ctk.CTkButton(new_window, text="Subscription Management", command=open_subscription).pack(pady=10)
 
-    ctk.CTkButton(new_window, text="Movie 1")
+    ctk.CTkButton(new_window, text="Movie 1", command=lambda: play_content("Movie 1")).pack(pady=5)
     ctk.CTkButton(new_window, text="Viewing Report", command=viewing_report).pack(pady=10)
     
 def login(): #Function for the login page
-    username = "test"
-    password = "test2"
-
-    if user_entry.get() == username and user_pass.get() == password:
+    if user_entry.get() == test_account.email and test_account.check_password(user_pass.get()):
         tkmb.showinfo(title="Login Successful",message="You have logged in successfully")
         app.withdraw() # Hides the login window
         profile() #Calls profile function
-    elif user_entry.get() == username and user_pass.get() != password:
+    elif user_entry.get() == test_account.email and not test_account.check_password(user_pass.get()):
         tkmb.showwarning(title='Wrong password',message='Please check your password')
-    elif user_entry.get() != username and user_pass.get() == password:
+    elif user_entry.get() != test_account.email and test_account.check_password(user_pass.get()):
         tkmb.showwarning(title='Wrong username',message='Please check your username')
     else:
         tkmb.showerror(title="Login failed",message="Invalid Username and password")
