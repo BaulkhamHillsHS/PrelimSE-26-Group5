@@ -69,6 +69,21 @@ test_account = AccountCredentials(
 )
 test_account.save_to_csv()
 
+def check_login(username, password, filename="accounts.csv"):
+    if not os.path.exists(filename):
+        return False
+    with open(filename, "r") as f:
+        reader = csv.reader(f)
+        next(reader, None)
+
+        for row in reader:
+            if len(row) < 3:
+                continue
+            if row[0] == username  and  row [2] == password:
+                return True
+            
+    return False
+
 def create_profile(): 
     new_window2 = ctk.CTkToplevel(app) #creates new window for profile creation
     new_window2.title("MAXeth Profile Creation")
@@ -304,16 +319,18 @@ def new_account():
     create_button = ctk.CTkButton(new_window3, text="Create", command=signup)
     create_button.pack(pady=10)
 def login(): #Function for the login page
-    if user_entry.get() == test_account.name and test_account.check_password(user_pass.get()):
-        tkmb.showinfo(title="Login Successful",message="You have logged in successfully")
-        app.withdraw() # Hides the login window
-        profile() #Calls profile function
-    elif user_entry.get() == test_account.name and not test_account.check_password(user_pass.get()):
-        tkmb.showwarning(title='Wrong password',message='Please check your password')
-    elif user_entry.get() != test_account.name and test_account.check_password(user_pass.get()):
-        tkmb.showwarning(title='Wrong username',message='Please check your username')
+    username = user_entry.get()
+    password = user_pass.get()
+
+    if check_login(username,password):
+        tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
+        app.withdraw()
+        profile()
+    elif any(username == row[0] for row in csv.reader(open("accounts,csv","r")) if row):
+        tkmb.showwarning(title="Wrong password", message="Please check your password")
+
     else:
-        tkmb.showerror(title="Login failed",message="Invalid Username and password")
+        tkmb.showerror(title="Login failed",message="Invalid Username and Password")
     
 
 label = ctk.CTkLabel(app, text = "Login")
