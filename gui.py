@@ -270,19 +270,34 @@ def new_account():
     ctk.CTkLabel(new_window3, text="Sign up to MAXeth", font=("Arial", 24, "bold")).pack(pady=20)
 
     acc_username = ctk.CTkEntry(new_window3, placeholder_text="Create a username")
-    acc_username.pack(pady=15)
+    acc_username.pack(pady=20)
+
+    acc_email = ctk.CTkEntry(new_window3, placeholder_text = "Enter email")
+    acc_email.pack(pady=20)
 
     acc_password = ctk.CTkEntry(new_window3, placeholder_text="Create a password")
-    acc_password.pack(pady=15)
+    acc_password.pack(pady=20)
 
     confirm_password = ctk.CTkEntry(new_window3, placeholder_text="Confirm your password")
-    confirm_password.pack(pady=15)
+    confirm_password.pack(pady=20)
+
+    choose_subscription = ctk.CTkComboBox(new_window3, values=["Basic", "Standard", "Premium"])
+    choose_subscription.set("Choose a plan")
+    choose_subscription.pack(pady=15)
 
     def signup():
         if acc_password.get() != confirm_password.get():
-            tkmb.showerror(title="Passwords don't match")
+            tkmb.showerror(title="Error",message="Passwords don't match")
         else:
-            tkmb.showinfo(title="Account created")
+            tkmb.showinfo(title="Success",message="Account created successfully")
+            new_account = AccountCredentials(
+                name=acc_username.get(),
+                email=acc_email.get(),
+                password=acc_password.get(),
+                subscription_plan=choose_subscription.get(),
+                profiles=["Default Profile"]
+                    )
+            new_account.save_to_csv()
             new_window3.destroy()
             app.mainloop()
 
