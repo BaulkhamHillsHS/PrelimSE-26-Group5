@@ -61,10 +61,10 @@ class AccountCredentials:
             writer.writerow([self.name, self.email, self.password, self.subscription_plan, ";".join(self.profiles)])
     
 test_account = AccountCredentials(
-    name="Humza",
-    email="alpha@maxeth.com",
-    password="potato321",
-    subscription_plan="Basic",
+    name="MrDunne",
+    email="ryan.dunne9@det.nsw.gov.au",
+    password="Baulko11!!",
+    subscription_plan="Premium",
     profiles=["Profile 1"]
 )
 test_account.save_to_csv()
@@ -263,13 +263,13 @@ def open_window_login(): # Function which opens a new window after successful lo
     display_movies(movies)
 
 def login(): #Function for the login page
-    if user_entry.get() == test_account.email and test_account.check_password(user_pass.get()):
+    if user_entry.get() == test_account.name and test_account.check_password(user_pass.get()):
         tkmb.showinfo(title="Login Successful",message="You have logged in successfully")
         app.withdraw() # Hides the login window
         profile() #Calls profile function
-    elif user_entry.get() == test_account.email and not test_account.check_password(user_pass.get()):
+    elif user_entry.get() == test_account.name and not test_account.check_password(user_pass.get()):
         tkmb.showwarning(title='Wrong password',message='Please check your password')
-    elif user_entry.get() != test_account.email and test_account.check_password(user_pass.get()):
+    elif user_entry.get() != test_account.name and test_account.check_password(user_pass.get()):
         tkmb.showwarning(title='Wrong username',message='Please check your username')
     else:
         tkmb.showerror(title="Login failed",message="Invalid Username and password")
