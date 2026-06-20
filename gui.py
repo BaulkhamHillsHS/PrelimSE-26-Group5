@@ -9,7 +9,7 @@ ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 app = ctk.CTk()
-app.geometry("400x400")
+app.geometry("400x550")
 app.title("MAXeth Streaming Service")
 
 viewing_history = "history.csv"
@@ -29,11 +29,11 @@ movies = [
 
 if not os.path.exists(viewing_history):
     with open(viewing_history, "w", newline="") as f:
-        csv.writer(f).writerow(["movie"])
+        csv.writer(f).writerow(["movies"])
 
-def add_to_viewing_history(movie):
+def add_to_viewing_history(movies):
     with open(viewing_history, "a", newline="") as f:
-        csv.writer(f).writerow([movie])
+        csv.writer(f).writerow([movies])
 
 def get_viewing_history():
     with open(viewing_history, "r") as f:
@@ -262,6 +262,32 @@ def open_window_login(): # Function which opens a new window after successful lo
     ctk.CTkButton(filterborder, text="Filter", command=filter_movies).pack(side="left", padx=5)
     display_movies(movies)
 
+def new_account():
+    new_window3 = ctk.CTkToplevel(app) #creates new window for profile creation
+    new_window3.title("MAXeth Account Creation")
+    new_window3.geometry("600x600")
+
+    ctk.CTkLabel(new_window3, text="Sign up to MAXeth", font=("Arial", 24, "bold")).pack(pady=20)
+
+    acc_username = ctk.CTkEntry(new_window3, placeholder_text="Create a username")
+    acc_username.pack(pady=15)
+
+    acc_password = ctk.CTkEntry(new_window3, placeholder_text="Create a password")
+    acc_password.pack(pady=15)
+
+    confirm_password = ctk.CTkEntry(new_window3, placeholder_text="Confirm your password")
+    confirm_password.pack(pady=15)
+
+    def signup():
+        if acc_password.get() != confirm_password.get():
+            tkmb.showerror(title="Passwords don't match")
+        else:
+            tkmb.showinfo(title="Account created")
+            new_window3.destroy()
+            app.mainloop()
+
+    create_button = ctk.CTkButton(new_window3, text="Create", command=signup)
+    create_button.pack(pady=10)
 def login(): #Function for the login page
     if user_entry.get() == test_account.name and test_account.check_password(user_pass.get()):
         tkmb.showinfo(title="Login Successful",message="You have logged in successfully")
@@ -298,6 +324,13 @@ loginbutton.pack(pady=12,padx=10)
 
 checkbox = ctk.CTkCheckBox(master=frame,text='Remember Me')
 checkbox.pack(pady=12,padx=10)
+
+new = ctk.CTkLabel(app, text = "Don't have an account? Sign Up!")
+new.pack(pady=20)
+
+signup_button = ctk.CTkButton(app, text="Sign Up", command=new_account)
+signup_button.pack(pady=12,padx=10)
+
 
 
 app.mainloop()
