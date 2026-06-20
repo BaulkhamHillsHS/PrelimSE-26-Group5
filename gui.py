@@ -2,8 +2,12 @@ import customtkinter as ctk
 import os 
 import csv
 import tkinter.messagebox as tkmb
+import hashlib
 import PIL
 from PIL import Image
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -13,6 +17,7 @@ app.geometry("400x550")
 app.title("MAXeth Streaming Service")
 
 viewing_history = "history.csv"
+current_profile_age = 18
 watchlist = []
 movies = [
     {"Title": "The Matrix", "genre": "Sci-Fi", "type": "Movie", "rating": "MA-15"},
@@ -45,12 +50,12 @@ class AccountCredentials:
     def __init__(self, name, email, password, subscription_plan, profiles=None):
         self.name = name
         self.email = email
-        self.password = password
+        self.password = hash_password(password)
         self.subscription_plan = subscription_plan
         self.profiles = profiles if profiles else []
     
     def check_password(self, attempt):
-        return self.password == attempt
+        return self.password == hash_password(attempt)
     
     def save_to_csv(self, filename="accounts.csv"):
         file_exists = os.path.exists(filename)
@@ -72,6 +77,7 @@ test_account.save_to_csv()
 def check_login(username, password, filename="accounts.csv"):
     if not os.path.exists(filename):
         return False
+    hashed_attempt = hash_password(password)
     with open(filename, "r") as f:
         reader = csv.reader(f)
         next(reader, None)
@@ -79,7 +85,7 @@ def check_login(username, password, filename="accounts.csv"):
         for row in reader:
             if len(row) < 3:
                 continue
-            if row[0] == username  and  row [2] == password:
+            if row[0] == username  and  row [2] == hashed_attempt:
                 return True
             
     return False
@@ -100,6 +106,11 @@ def create_profile():
     age.pack(pady=10)
 
     def create():
+        global current_profile_age
+        try:
+            current_profile_age = int(age.get())
+        except ValueError:
+            current_profile_age = 18
         new_window2.destroy()
         open_window_login()
 
@@ -264,18 +275,31 @@ def open_window_login(): # Function which opens a new window after successful lo
         genre = genre_options.get()
         content_type = type_options.get()
         rating = rating_options.get()
+        search_text = search_bar.get().strip().lower()
         
-        filtered = movies
+        rating_age_map = {
+         "G": 0,
+         "PG": 0,
+         "M": 15,
+         "MA-15": 15,
+         "R": 18
+        }
+        
+        filtered = [m for m in movies if rating_age_map[m["rating"]] <= current_profile_age]
+        
         if genre != "All":
             filtered = [m for m in filtered if m["genre"] == genre]
         if content_type != "All":
             filtered = [m for m in filtered if m["type"] == content_type]
         if rating != "All":
             filtered = [m for m in filtered if m["rating"] == rating]
+        if search_text:
+            filtered = [m for m in filtered if search_text in m["Title"].lower()]
         display_movies(filtered)
         
     ctk.CTkButton(filterborder, text="Filter", command=filter_movies).pack(side="left", padx=5)
-    display_movies(movies)
+    rating_age_map = {"G": 0, "PG": 0, "M": 15, "MA-15": 15, "R": 18}
+    display_movies([m for m in movies if rating_age_map[m["rating"]] <= current_profile_age])
 
 def new_account():
     new_window3 = ctk.CTkToplevel(app) #creates new window for profile creation
@@ -314,7 +338,6 @@ def new_account():
                     )
             new_account.save_to_csv()
             new_window3.destroy()
-            app.mainloop()
 
     create_button = ctk.CTkButton(new_window3, text="Create", command=signup)
     create_button.pack(pady=10)
@@ -326,7 +349,7 @@ def login(): #Function for the login page
         tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
         app.withdraw()
         profile()
-    elif any(username == row[0] for row in csv.reader(open("accounts,csv","r")) if row):
+    elif any(username == row[0] for row in csv.reader(open("accounts.csv","r")) if row):
         tkmb.showwarning(title="Wrong password", message="Please check your password")
 
     else:
