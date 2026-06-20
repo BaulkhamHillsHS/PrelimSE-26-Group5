@@ -79,6 +79,11 @@ def create_profile():
     username = ctk.CTkEntry(new_window2, placeholder_text="Create a username")
     username.pack(pady=15) #Profile does not need a password due to already logging in to an account
 
+    age_options = [str(i) for i in range(5,101)]
+    age = ctk.CTkComboBox(new_window2, values=age_options, width=150)
+    age.set("Select Age")
+    age.pack(pady=10)
+
     def create():
         new_window2.destroy()
         open_window_login()
