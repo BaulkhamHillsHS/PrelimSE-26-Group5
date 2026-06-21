@@ -262,14 +262,25 @@ def open_window_login(): # Function which opens a new window after successful lo
     ctk.CTkButton(new_window, text="Subscription Management", command=open_subscription).pack(pady=10)
     ctk.CTkButton(new_window, text="Viewing Report", command=viewing_report).pack(pady=10)
     
-    movie_buttons_frame = ctk.CTkFrame(new_window)
+    movie_buttons_frame = ctk.CTkScrollableFrame(new_window, orientation="horizontal", height=220)
     movie_buttons_frame.pack(pady=10, padx=10, fill='x')
     
     def display_movies(filtered_list):
         for widget in movie_buttons_frame.winfo_children():
             widget.destroy()
         for movie in filtered_list:
-            ctk.CTkButton(movie_buttons_frame, text=movie["Title"], command=lambda m=movie: play_content(m["Title"])).pack(pady=2)
+            card = ctk.CTkFrame(movie_buttons_frame, width=150, height=180, corner_radius=10)
+            card.pack(side="left", padx=10, pady=10)
+            
+            poster = ctk.CTkLabel(card, text="🎬", font=("Arial", 50), width=150, height=120, fg_color="gray25", corner_radius=10)
+            poster.pack(pady=5)
+            
+            title_label = ctk.CTkLabel(card, text=movie["Title"], font=("Arial", 12, "bold"))
+            title_label.pack(pady=5)
+            
+            card.bind("<Button-1>", lambda e, m=movie: play_content(m["Title"]))
+            poster.bind("<Button-1>", lambda e, m=movie: play_content(m["Title"]))
+            title_label.bind("<Button-1>", lambda e, m=movie: play_content(m["Title"]))
     
     def filter_movies():
         genre = genre_options.get()
