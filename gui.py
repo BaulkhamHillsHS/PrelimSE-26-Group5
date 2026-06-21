@@ -50,12 +50,12 @@ class AccountCredentials:
     def __init__(self, name, email, password, subscription_plan, profiles=None):
         self.name = name
         self.email = email
-        self.password = hash_password(password)
+        self._password = hash_password(password)
         self.subscription_plan = subscription_plan
         self.profiles = profiles if profiles else []
     
     def check_password(self, attempt):
-        return self.password == hash_password(attempt)
+        return self._password == hash_password(attempt)
     
     def save_to_csv(self, filename="accounts.csv"):
         file_exists = os.path.exists(filename)
@@ -63,7 +63,7 @@ class AccountCredentials:
             writer = csv.writer(f)
             if not file_exists:
                 writer.writerow(["name", "email", "password", "subscription_plan", "profiles"])
-            writer.writerow([self.name, self.email, self.password, self.subscription_plan, ";".join(self.profiles)])
+            writer.writerow([self.name, self.email, self._password, self.subscription_plan, ";".join(self.profiles)])
     
 test_account = AccountCredentials(
     name="MrDunne",
@@ -102,7 +102,7 @@ def create_profile():
 
     age_options = [str(i) for i in range(5,101)]
     age = ctk.CTkComboBox(new_window2, values=age_options, width=150)
-    age.set("Select Age")
+    age.set("18")
     age.pack(pady=10)
 
     def create():
